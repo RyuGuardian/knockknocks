@@ -1,25 +1,16 @@
-/**
- * @fileOverview
-    Establishes the routes to interact with the joke database.
- * @author
-    Austin King
- */
-
 'use strict';
 
 var express = require('express');
 var jsonParser = require('body-parser').json();
 
 var Joke = require(__dirname + '/../models/joke');
-//var User = require(__dirname + '/../models/user');
 var handleError = require(__dirname + '/../lib/handle_error');
 var eatAuth = require(__dirname + '/../lib/eat_auth');
 var jokeEvents = require(__dirname + '/../events/joke_events');
 
 var jokeRouter = module.exports = exports = express.Router();
 
-/**
- * @method
+/*
     Logged-in users looking to be told a joke go to the /knockknock endpoint.\n
     This path finds a joke the user hasn't seen yet and responds with the joke ID and "Knock knock."\n
     It also sends back a joke token so we know which joke we're telling between requests and responses.
@@ -28,8 +19,7 @@ jokeRouter.post('/knockknock', jsonParser, eatAuth, function(req, resp) {
   jokeEvents.emit('user_knocked', resp, req.user, req.body.token);
 });
 
-/**
- * @method
+/*
     Logged-in users go to the /whosthere endpoint to ask who's knocking.\n
     This path responds with the setup.\n
     It uses the joke token to find which joke we're telling and sends it back again.
@@ -48,8 +38,7 @@ jokeRouter.post('/whosthere', jsonParser, eatAuth, function(req, resp) {
   });
 });
 
-/**
- * @method
+/*
     Logged-in users go to the /punchline endpoint to finish hearing the joke.\n
     This path responds with the punchline.\n
     It uses the joke token to find which joke we're telling and sends it back again.\n
@@ -76,9 +65,8 @@ jokeRouter.post('/punchline', jsonParser, eatAuth, function(req, resp) {
   });
 });
 
-/**
- * @method
-    Logged in users go to the /rate endpoint after hearing a joke and rating it.\n
+/*
+    Logged-in users go to the /rate endpoint after hearing a joke and rating it.\n
     This path responds with the rating of the joke, after calculating the user's input.\n
     It uses the joke token to find which joke we told and update its rating accordingly.
  */

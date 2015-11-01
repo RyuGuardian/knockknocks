@@ -19,7 +19,7 @@ jokeEvents.on('user_knocked', function(resp, user, userToken) {
       var jokeText = "Joke #" + data.ID + "\n";
       jokeText +=  "Knock knock.\n"; //first line to send
 
-      resp.json({msg: jokeText, jtoken: data.generateToken(), token: userToken});  //send token, also send joke ID?
+      resp.json({msg: jokeText, jtoken: data.generateToken(), token: userToken});  //send token, also send joke ID (jtoken)
     });
   }
   else {

@@ -21,7 +21,6 @@ var userSchema = new mongoose.Schema({
     jokes: Array,  //contains IDs of unseen jokes
     index: {type: Number, default: 0}  // keeps track of highest ID added to unseen jokes
   }
-  // adult: Boolean  //for allowing adult jokes; not in use yet
 });
 
 userSchema.methods.generateHash = function(password, callback) {

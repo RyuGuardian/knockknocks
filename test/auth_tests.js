@@ -56,11 +56,11 @@ describe('auth', function() {
       user.email = 'testuser2@test.com';
       user.username = 'testuser2';
       user.basic.username = 'testuser2';
-      user.generateHash('testpass2', function(err, resp) {  /* jshint ignore:line */
+      user.generateHash('testpass2', function(err) {
         if(err) {
           throw err;
         }
-        user.save(function(err, data) {  /* jshint ignore:line */
+        user.save(function(err) {
           if(err) {
             throw err;
           }
