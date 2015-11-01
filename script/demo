@@ -1,0 +1,42 @@
+#! /bin/bash
+
+clear
+
+var TOKEN
+
+echo "START"
+echo -n "superagent localhost:3000/signup post {username: tester, email: tester@test.net, password: testing123}"
+
+superagent localhost:3000/signup post {username: "'tester'", email: "'tester@test.net'", password: "'testing123'"}
+read -a TOKEN
+
+read -p "Knock knock"
+superagent localhost:3000/joke post {token: "'$TOKEN'"}
+read -p "To."
+superagent localhost:3000/joke/setup post {setup: "'To'", token: "'$TOKEN'"}
+read -p "To WHOM."
+superagent localhost:3000/joke/punchline post {setup: "'To'", punchline: "'To WHOM'", token: "'$TOKEN'"}
+
+read -p "Knock knock"
+superagent localhost:3000/joke post {token: "'$TOKEN'"}
+read -p "To."
+superagent localhost:3000/joke/setup post {setup: "'To'", token: "'$TOKEN'"}
+read -p "To WHOM."
+superagent localhost:3000/joke/punchline post {setup: "'To'", punchline: "'To WHOM'", token: "'$TOKEN'"}
+
+read -p "Login as new user"
+superagent localhost:3000/signup post {username: "'tester2'", email: "'tester2@test.net'", password: "'testing1234'"}
+read -a TOKEN
+
+read -p "Let's hear a joke..."
+superagent localhost:3000/knockknock post {token: "'$TOKEN'"}
+read -p "Who's there?"
+superagent localhost:3000/whosthere post {token: "'$TOKEN'", jtoken: "'1'"}
+read -p "To who?"
+superagent localhost:3000/punchline post {token: "'$TOKEN'", jtoken: "'1'"}
+read -p "That was a 4!"
+superagent localhost:3000/rate post {token: "'$TOKEN'", jtoken: "'1'", rating: "'4'"}
+
+
+read -p "..."
+echo "END"

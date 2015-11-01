@@ -1,0 +1,85 @@
+At knockknocks.net:                           Dataflow:
+
+================================
+Initial screen:                               <= GET /
+Who's there? _____                            => write HTML
+Enter your user name to log in,
+or your email to subscribe to knockknocks
+
+- - - - - - - - - - - - - - - -
+Enter email:
+ Who's there? _user@server.dom___ - one of:   <= POST { login: 'user@server.dom'}
+That email is already used - enter            => resp(409).{ msg: 'email used'}
+your username to log in (back to Initial)
+  - or -                          
+  (to Welcome to knockknocks)
+
+- - - - - - - - - - - - - - - -
+Enter user name:         
+ Who's there? _username_                      <= POST { login: 'name'}
+Username who? _p******d_                      => write HTML with user name
+Click "Log in"                                <= POST { login: 'name' pass: 'pwd' }
+or <enter> from password field = one of:
+Incorrect user name or password               => write HTML
+[could extend to password reset, p'bly not]
+  - or - (to Logged in)
+
+
+================================
+Welcome to knockknocks!                       => write HTML with subscribe token
+Pick your user name _____
+       and password _____
+Click "Subscribe"                             <= POST { user: 'name' : pass: 'pwd',
+                                                        subscribe: token}
+
+- - - - - - - - - - - - - - - -
+"Subscribe" - one of:                         => write HTML
+"That user name is already taken - 
+  please try another" (stay on Welcome)
+  - or -
+We've sent you an email at
+  email@server.dom
+Click on the link in the message
+to activate your account!        (back to Initial)
+
+================================
+Logged in:                                    => write HTML with login token
+                                                  and buttons that POST
+Click    "Knock Knock"                        <= POST { KK: loginToken}
+Click "Wanna hear a joke?"                    <= GET /loginToken
+Click "Log out" = terminate login session     <= POST { logout: loginToken }
+       (back to Initial)
+
+================================
+"Knock Knock":
+  Who's there?                                => resp { WT: jokeToken }
+               __setup______ <enter>          <= POST { S: jokeToken,
+                                                        text: 'whatever'}
++ _setup_ who?                                => resp { SW: jokeToken }
+               __punchline__ <enter>          <= POST { PL: jokeToken,
+                                                        text: 'whatever who want'}
+
++ one of:
+  That's a new one!                           => resp(201).{ msg: 'new joke',
+                                                      stats: 'as available'}
+    - or -
+  "Already heard that one from <username>"    => resp(200).{ msg: 'heard it',
+                                                      from: 'author username'}
+   (back to Logged in)
+
+================================
+Hear a joke:                                  <= GET /KK/loginToken
+Knock Knock?                                  => write HTML w/ button, token
+             Click "who's there?"             <= GET /WT/jokeToken
++Setup!                                       => write HTML w/ button, token
+             Click "setup who?"               <= GET /SW/jokeToken
++Punchline!                                   => write HTML w/ buttons, token
+
++Click rating buttons                         <= POST { rate: jokeToken,
+                                                        rating: 1-5 }
+ [or click "flag it"]?
++show effect of vote on popularity of joke    => write HTML
+ (and author)?  (back to Logged in)
+
+Login session token has an expire date
+ - req with expired token goes to Initial

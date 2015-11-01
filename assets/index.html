@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="kkApp">
+<head>
+  <title>Knock Knock</title>
+	<script type="text/javascript"
+        src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js">
+	</script>
+	<style>
+		.normEdit {
+			width: 12em;
+		}
+		.wideEdit {
+			width: 25em;
+		}
+	</style>
+</head>
+<body ng-controller="KnockCtrl">
+You tell it jokes. It tells you jokes. It's fun!<br>
+<div class="containLogin"  ng-show="showLogin">
+  <h2 class="form-signin-heading"><img src="knock.png"> Who's there?</h2>
+  <div class="alert alert-danger" ng-if="errorMessage"> {{errorMessage}} </div><br>
+  <form class="form-signin">
+    <input type="text" class="form-control normEdit" name="username" required placeholder="Username" ng-model="User.username"autofocus>&nbsp;
+    <input type="password" class="form-control normEdit" name="password" required placeholder="Password" ng-model="User.password">&nbsp;
+    <button class="btn btn-lg btn-primary btn-block" ng-click="register()">Log in</button>
+  	<p><input type="text" class="form-control wideEdit" name="email" placeholder="email" ng-model="User.email"></p>
+  </form>
+  <p>Enter your username and password to log in. <br>
+  To sign up for knockknocks, include your email.</p>
+</div> <!-- /container -->
+
+<div class="containStart" ng-show="showStart">
+  <h2 class="form-start-heading"><img src="knock.png">&nbsp;</h2>
+  <div class="alert alert-danger" ng-if="errorMessage">{{errorMessage}}</div><br>
+  <form class="form-start">
+    <button class="btn btn-lg btn-primary btn-block" ng-click="newJoke()">Knock Knock</button>&nbsp;
+    <button class="btn btn-lg btn-primary btn-block" ng-click="hearJoke()">Hear a joke</button>&nbsp;
+    <button class="btn btn-lg btn-primary btn-block" ng-click="logoff()">Log out</button>
+  </form>
+</div> <!-- /container -->
+
+<div class="containNew" ng-show="showNew">
+  <h2 class="form-newjoke-heading"><img src="knock.png">&nbsp;</h2>
+  <div class="alert alert-danger" ng-if="errorMessage">{{errorMessage}}</div><br>
+  <form class="form-newjoke">
+    <button class="btn btn-lg btn-primary btn-block" ng-click="newJoke()">Knock Knock</button>&nbsp;<br>
+    <div class="whosThere" ng-show="showSetup"><p>&nbsp;&nbsp;&nbsp;&nbsp;Who's there?</p></div>
+    <input type="text" class="form-control" name="setup" ng-show="showSetup" placeholder="Setup" ng-model="Joke.setup" autofocus>&nbsp;
+    <button class="btn btn-lg btn-primary btn-block" ng-show="showSetup" ng-disabled="!Joke.setup" ng-click="newSetup()">Set me up</button><br>  
+    <div class="setupWho" ng-show="showPunch"><p>&nbsp;&nbsp;&nbsp;&nbsp;{{Joke.setup}} who?</p></div>
+    <input type="text" class="form-control wideEdit" name="setup" ng-show="showPunch" placeholder="Punchline" ng-model="Joke.punchline" autofocus>&nbsp;
+    <button class="btn btn-lg btn-primary btn-block" ng-show="showPunch" ng-disabled="!Joke.punchline" ng-click="newPunchline()">Hit me!</button>
+    <div class="finishJoke" ng-show="showNextSteps"><p>&nbsp;&nbsp;&nbsp;&nbsp;{{finishJoke}}</p></div>
+    <button class="btn btn-lg btn-primary btn-block" ng-show="showNextSteps" ng-click="hearJoke()">Hear a joke</button>&nbsp;
+    <button class="btn btn-lg btn-primary btn-block" ng-show="showNextSteps" ng-click="logoff()">Log out</button>
+  </form>
+</div> <!-- /container -->
+
+<div class="container" ng-show="showHear">
+  <h2 class="form-hearjoke-heading"><img src="knock.png">&nbsp;</h2>
+  <div class="alert alert-danger" ng-if="errorMessage">{{errorMessage}}</div>
+  <form class="form-hearjoke">
+    <div class="knockKnock"><p>Knock Knock</p></div>
+    &nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-lg btn-primary btn-block" ng-click="hearSetup()">Who's There?</button>&nbsp;<br>
+    <div class="setup" ng-show="showHearSetup" ng-model="Joke.setup"><p>{{Joke.setup}}</p></div>
+    &nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-lg btn-primary btn-block" ng-show="showHearSetup" ng-click="hearPunchline()">{{Joke.setup}} who?</button><br>  
+    <div class="punchline" ng-show="showNextSteps"><p>{{Joke.punchline}}</p></div>
+    <div class="rateJoke" ng-show="showNextSteps"><p>Rate this joke: 
+      <button ng-disabled="alreadyRated"><img src="knock.png" ng-click="rateJoke(1)"></button>
+      <button ng-disabled="alreadyRated"><img src="knock.png" ng-click="rateJoke(2)"></button>
+      <button ng-disabled="alreadyRated"><img src="knock.png" ng-click="rateJoke(3)"></button>
+      <button ng-disabled="alreadyRated"><img src="knock.png" ng-click="rateJoke(4)"></button>
+      <button ng-disabled="alreadyRated"><img src="knock.png" ng-click="rateJoke(5)"></button><br></p>
+      <div class="unratedStats" ng-show="!Joke.rating.count"><p>This joke has not been rated.</p></div>
+      <div class="ratingStats" ng-show="Joke.rating.count"><p>This joke has been rated at {{Joke.rating.average}} by {{Joke.rating.count}} users.</p></div>
+    </div>
+    <button class="btn btn-lg btn-block" ng-show="showNextSteps" ng-click="newJoke()">Knock Knock</button>&nbsp;
+    <button class="btn btn-lg btn-block" ng-show="showNextSteps" ng-click="hearJoke()">Hear a joke</button>&nbsp;
+    <button class="btn btn-lg btn-block" ng-show="showNextSteps" ng-click="logoff()">Log out</button>
+  </form>
+</div> <!-- /container -->
+
+<script type="application/javascript" src="knockknock.js"></script>
+</body>
+</html>
